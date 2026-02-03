@@ -2,15 +2,18 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: guestbook-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
   - http:
       paths:
-      - path: /guestbook        # Access at http://<ingress-ip>/guestbook
+      - path: /guestbook
         pathType: Prefix
         backend:
           service:
-            name: kustomize-guestbook-ui   # Kustomize adds "kustomize-" prefix
+            # Use "guestbook-ui" here - kustomize namePrefix will transform it to "kustomize-guestbook-ui"
+            name: guestbook-ui
             port:
               number: 80
